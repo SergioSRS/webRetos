@@ -7,14 +7,14 @@
     <link rel="stylesheet" type="text/css">     
 </head>
 <body>
-    <div class="wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="page-header clearfix">
-                        <a href="index.php" class="btn btn-success pull-left">Home</a>
-                        <h2 class="pull-left">Categorias</h2>
-                        <a href="vistas/alta.php" class="btn btn-success pull-right">Añadir categoria</a>
+    <div>
+        <div>
+            <div>
+                <div>
+                    <div>
+                        <a href="index.php">Home</a>
+                        <h2>Categorias</h2>
+                        <a href="vistas/alta.php">Añadir categoria</a>
                     </div>
                     <?php
                         //Si existen resultados en la base de datos queremos que nos salgan listados

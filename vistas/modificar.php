@@ -12,24 +12,23 @@
     
 </head>
 <body>
-    <div class="wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="page-header">
+    <div>
+        <div>
+            <div>
+                <div>
+                    <div>
                         <h2>Modificar Categorias</h2>
                     </div>
                     <p>Rellena el formulario para actualizar un registro de categorias.</p>
                     <form action="../index.php?act=update" method="post" >
-                      
-                        <div class="form-group">
+                        <div>
                             <label>Nombre categoria</label>
-                            <input type="text" name="nombre" class="form-control" value="<?php echo $categoria->nombre; ?> ">
+                            <input type="text" name="nombre" value="<?php echo $categoria->nombre; ?> ">
                             
                         </div>
                         <input type="hidden" name="id" value="<?php echo $categoria->id; ?>"/>
-                        <input type="submit" name="updatebtn" class="btn btn-primary" value="Submit">
-                        <a href="../index.php" class="btn btn-default">Cancel</a>
+                        <input type="submit" name="updatebtn" value="Submit">
+                        <a href="../index.php">Cancel</a>
                     </form>
                 </div>
             </div>        

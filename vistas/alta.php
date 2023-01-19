@@ -13,21 +13,21 @@ $categoria=isset($_SESSION['categoria'])?unserialize($_SESSION['categoria']):new
     <link type="text/css" rel="stylesheet" >
 </head>
 <body>
-    <div class="wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="page-header">
+    <div>
+        <div>
+            <div>
+                <div>
+                    <div>
                         <h2>Añadir categoria</h2>
                     </div>
                     <p>Rellena el formulario y acepta para enviar los datos a la base de datos</p>
                     <form action="../index.php?act=add" method="post" >
-                        <div class="form-group">
+                        <div >
                             <label>Nombre Categoria</label>
-                            <input name="nombre" class="form-control" ">
+                            <input name="nombre">
                         </div>
-                        <input type="submit" name="addbtn" class="btn btn-primary" value="Submit">
-                        <a href="../index.php" class="btn btn-default">Cancel</a>
+                        <input type="submit" name="addbtn" value="Submit">
+                        <a href="../index.php">Cancel</a>
                     </form>
                 </div>
             </div>        
