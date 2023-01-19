@@ -1,6 +1,5 @@
 <?php
-
-class configuracion  
+class config  
 {	
 	function __construct() {
 		$this->host = "localhost";
