@@ -72,7 +72,7 @@
 						 }
 					 }else
 					 {              
-						$_SESSION['categoria']=serialize($categoria);//Uso la sesion para guardar la categoria
+						
 						$this->pageRedirect("vistas/alta.php");                
 					 }
 				 }
@@ -106,7 +106,7 @@
 						 }
 					 }else
 					 {         
-						$_SESSION['categoria']=serialize($categoria);  
+						$_SESSION['categoria']=serialize($categoria);  //guardamos en la sesión la categoria a modificar
 						 $this->pageRedirect("vistas/modificar.php");                
 					 }
 					 //Si no esta pulsado el boton de modificar quiero este escenario
@@ -117,7 +117,7 @@
 					 $categoria=new Categoria();                  
 					 $categoria->id=$fila["id"];
 					 $categoria->nombre=$fila["nombre"];
-					 $_SESSION['categoria']=serialize($categoria);  
+					 $_SESSION['categoria']=serialize($categoria);  //guardams en la sesion la categoría a modificar 
 					 $this->pageRedirect('vistas/modificar.php');
 				 }else{
 					 echo "No valido";

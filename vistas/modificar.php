@@ -1,5 +1,6 @@
 <?php
         require '../modelo/categorias.php'; 
+        //Necesito recordar a que categoria hago referencia
         session_start();
         $categoria=isset($_SESSION['categoria'])?unserialize($_SESSION['categoria']):new Categoria();                
 ?>

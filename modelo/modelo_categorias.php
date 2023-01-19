@@ -16,7 +16,7 @@
 			$this->conexion=new mysqli($this->host,$this->user,$this->pass,$this->db);
 			if ($this->conexion->connect_error) 
 			{
-    			die("Erron in connection: " . $this->conexion->connect_error);
+    			die("Error en conexion " . $this->conexion->connect_error);
 			}
 		}
 		// Metodo para cerrar conexion de la base de datos

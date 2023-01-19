@@ -1,10 +1,3 @@
-<?php
- require '../modelo/categorias.php'; 
-
-session_start();
-//Este codigo saca el valor almacenado en la sesion y crea la categoria para usarse en este documento
-$categoria=isset($_SESSION['categoria'])?unserialize($_SESSION['categoria']):new Categoria();            
- ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
