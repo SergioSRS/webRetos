@@ -14,7 +14,7 @@
                         <h2>Añadir categoria</h2>
                     </div>
                     <p>Rellena el formulario y acepta para enviar los datos a la base de datos</p>
-                    <form action="../index.php?act=add" method="post" >
+                    <form action="../facade.php?actP=categoria&act=add" method="post" >
                         <div >
                             <label>Nombre Categoria</label>
                             <input name="nombre">
