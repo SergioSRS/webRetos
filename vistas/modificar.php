@@ -21,7 +21,7 @@
                         <h2>Modificar Categorias</h2>
                     </div>
                     <p>Rellena el formulario para actualizar un registro de categorias.</p>
-                    <form action="../index.php?act=update" method="post" >
+                    <form action="../facade.php?actP=categoria&act=update" method="post" >
                         <div>
                             <label>Nombre categoria</label>
                             <input type="text" name="nombre" value="<?php echo $categoria->nombre; ?> ">

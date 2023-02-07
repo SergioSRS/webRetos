@@ -18,6 +18,6 @@ session_unset();
             echo "Hola mundo";
             break;								
         default:
-           echo "Hola mundo";
+         header('Location:index.php');
     }
 ?>

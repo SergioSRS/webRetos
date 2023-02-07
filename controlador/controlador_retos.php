@@ -1,18 +1,18 @@
 <?php
-	require 'modelo/modelo_categorias.php';
-    require 'modelo/categorias.php';
+	require 'modelo/modelo_retos.php';
+    require 'modelo/retos.php';
     require_once 'config.php';
 
 	//Si la sesion no esta activa, la sesion se activa
 	session_status() === PHP_SESSION_ACTIVE ? TRUE : session_start();
 	
-    class controladorCategoria 
+    class controladorReto
 	{
  		function __construct() 
 		{          
 			$this->objconfig = new config();
             //Le pasa la configuracion al modelo para que se pueda conectar este a la bbdd
-			$this->modelo =  new modeloCategoria($this->objconfig);
+			$this->modelo = new modeloReto($this->objconfig);
 		}
         // Se encarga de  elegir la acción dependiendo del input del usuario
 		public function mvcHandler() 
@@ -40,10 +40,10 @@
 			header('Location:'.$url);
 		}	
         // funcion para validar los campos del usuario
-		public function checkValidation($categoria)
+		public function checkValidation($reto)
         {    $noerror=true;               
             // Validamos nombre          
-			if(empty($categoria->nombre) ){
+			if(empty($reto->nombre) ){
                 $noerror=false;     
             }
               
@@ -53,27 +53,38 @@
 		 public function insert()
 		 {
 			 try{
-				 $categoria=new Categoria();
+				 $reto=new Reto();
+			
 				 if (isset($_POST['addbtn'])) 
 				 {   
 		
 					 //Elimina espacio en blanco (u otro tipo de caracteres) del inicio y el final de la cadena
-					 $categoria->nombre = trim($_POST['nombre']);
+					$reto->nombre = trim($_POST['nombre']);
+					$reto->dirigido = trim($_POST['dirigido']);
+					$reto->descripcion= trim($_POST['descripcion']);
+					$reto->fechaFinInscripcion= trim($_POST['fechaFinInscripcion']);
+					$reto->fechaInicioInscripcion= trim($_POST['fechaInicioInscripcion']);
+					$reto->fechaFinReto= trim($_POST['fechaFinReto']);
+					$reto->fechaInicioReto= trim($_POST['fechaInicioReto']);
+					$reto->fechaPublicacion= trim($_POST['fechaPublicacion']);
+					$reto->publicado= trim($_POST['publicado']);
 					 //llamamos a la validacion
-					 $check=$this->checkValidation($categoria);                    
+					 $check=$this->checkValidation($reto);                    
 					 if($check)
 					 {   
 						 //llamamos al metodo de insertar del modelo          
-						 $codigoConexion = $this -> modelo ->insertRecord($categoria);
+						 $codigoConexion = $this -> modelo ->insertRecord($reto);
+						
 						 if($codigoConexion>0){			
 							 $this->list();
 						 }else{
+							//Ver el de categoria
 							 echo "Algo salió mal intentelo de nuevo";
 						 }
 					 }else
 					 {              
 						
-						$this->pageRedirect("vistas/alta.php");                
+						$this->pageRedirect("vistas/vistaReto/alta.php");                
 					 }
 				 }
 			 }catch (Exception $e) 
@@ -90,15 +101,22 @@
 				 
 				 if (isset($_POST['updatebtn'])) 
 				 {
-					$categoria=unserialize($_SESSION['categoria']);
-					 $categoria->id = trim($_POST['id']);
-					 $categoria->nombre = trim($_POST['nombre']);
+					$reto=unserialize($_SESSION['reto']);
+					$reto->id = trim($_POST['id']);
+					$reto->nombre = trim($_POST['nombre']);
+					$reto->descripcion= trim($_POST['descripcion']);
+					$reto->fechaFinInscripcion= trim($_POST['fechaFinInscripcion']);
+					$reto->fechaInicioInscripcion= trim($_POST['fechaInicioInscripcion']);
+					$reto->fechaFinReto= trim($_POST['fechaFinReto']);
+					$reto->fechaInicioReto= trim($_POST['fechaInicioReto']);
+					$reto->fechaPublicacion= trim($_POST['fechaPublicacion']);
+					$reto->publicado= trim($_POST['publicado']);
 			       
 					 // Validamos los campos actualizados 
-					 $check=$this->checkValidation($categoria);
+					 $check=$this->checkValidation($reto);
 					 if($check)
 					 {
-						 $respuesta = $this -> modelo ->updateRecord($categoria);	                        
+						 $respuesta = $this -> modelo ->updateRecord($reto);	                        
 						 if($respuesta){			
 							 $this->list();                           
 						 }else{
@@ -106,19 +124,19 @@
 						 }
 					 }else
 					 {         
-						$_SESSION['categoria']=serialize($categoria);  //guardamos en la sesión la categoria a modificar
-						 $this->pageRedirect("vistas/modificar.php");                
+						$_SESSION['reto']=serialize($reto);  //guardamos en la sesión la categoria a modificar
+						 $this->pageRedirect("vistas/vistaReto/modificar.php");                
 					 }
 					 //Si no esta pulsado el boton de modificar quiero este escenario
 				 }elseif(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
 					 $id=$_GET['id'];
 					 $result=$this->modelo->selectRecord($id);
-					 $fila=mysqli_fetch_array($result);  
-					 $categoria=new Categoria();                  
-					 $categoria->id=$fila["id"];
-					 $categoria->nombre=$fila["nombre"];
-					 $_SESSION['categoria']=serialize($categoria);  //guardams en la sesion la categoría a modificar 
-					 $this->pageRedirect('vistas/modificar.php');
+					 $fila = $result->fetch_array();
+					 $reto=new Reto();                  
+					 $reto->id=$fila["id"];
+					 $reto->nombre=$fila["nombre"];
+					 $_SESSION['reto']=serialize($reto);  //guardams en la sesion la categoría a modificar 
+					 $this->pageRedirect('vistas/vistaReto/modificar.php');
 				 }else{
 					 echo "No valido";
 				 }
@@ -139,7 +157,7 @@
 					 $id=$_GET['id'];
 					 $respuesta=$this->modelo->deleteRecord($id);                
 					 if($respuesta){
-						 $this->pageRedirect('index.php');
+						$this->list();
 					 }else{
 						 echo "Algo salio mal";
 					 }
@@ -155,7 +173,7 @@
 		 }
 		 public function list(){
 			 $result=$this->modelo->selectRecord(0);
-			 include "vistas/listar.php";                                        
+			 include "vistas/vistaReto/listar.php";                                        
 		 }
 	 }
 		 

@@ -59,15 +59,18 @@
 		
 					 //Elimina espacio en blanco (u otro tipo de caracteres) del inicio y el final de la cadena
 					 $categoria->nombre = trim($_POST['nombre']);
+
 					 //llamamos a la validacion
 					 $check=$this->checkValidation($categoria);                    
 					 if($check)
 					 {   
 						 //llamamos al metodo de insertar del modelo          
 						 $codigoConexion = $this -> modelo ->insertRecord($categoria);
+						
 						 if($codigoConexion>0){			
 							 $this->list();
 						 }else{
+							//Aqui añadir el error que me se ha producido por ejemplo que introduzca repetido
 							 echo "Algo salió mal intentelo de nuevo";
 						 }
 					 }else
@@ -113,7 +116,7 @@
 				 }elseif(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
 					 $id=$_GET['id'];
 					 $result=$this->modelo->selectRecord($id);
-					 $fila=mysqli_fetch_array($result);  
+					 $fila = $result->fetch_array();
 					 $categoria=new Categoria();                  
 					 $categoria->id=$fila["id"];
 					 $categoria->nombre=$fila["nombre"];
@@ -132,6 +135,7 @@
 		 // Eliminar fila
 		 public function delete()
 		 {
+			var_dump($_GET);
 			 try
 			 {
 				 if (isset($_GET['id'])) 
@@ -139,7 +143,7 @@
 					 $id=$_GET['id'];
 					 $respuesta=$this->modelo->deleteRecord($id);                
 					 if($respuesta){
-						 $this->pageRedirect('index.php');
+						 $this->list();
 					 }else{
 						 echo "Algo salio mal";
 					 }

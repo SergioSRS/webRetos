@@ -1,6 +1,6 @@
 <?php
 	
-	class modeloCategoria
+	class modeloReto
 	{
 		// set database config for mysql
 		function __construct($consetup)
@@ -14,6 +14,7 @@
 		public function open_db()
 		{
 			$this->conexion=new mysqli($this->host,$this->user,$this->pass,$this->db);
+			$this->conexion->set_charset('utf8');
 			if ($this->conexion->connect_error) 
 			{
     			die("Error en conexion " . $this->conexion->connect_error);
@@ -30,11 +31,13 @@
 		{
 			try
 			{	
+			
 				$this->open_db();
-				$query=$this->conexion->prepare("INSERT INTO categorias (nombre) VALUES (?)");
-				$query->bind_param("s",$obj->nombre);
+				$query=$this->conexion->prepare("INSERT INTO retos (nombre,dirigido,descripcion,fechaFinInscripcion,fechaInicioInscripcion,fechaFinReto,fechaInicioReto,fechaPublicacion,publicado) VALUES (?,?,?,?,?,?,?,?,?)");
+				$query->bind_param("ssssssssi",$obj->nombre,$obj->dirigido,$obj->descripcion,$obj->fechaFinInscripcion,$obj->fechaInicioInscripcion,$obj->fechaFinReto,$obj->fechaInicioReto,$obj->fechaPublicacion,$obj->publicado);
 				$query->execute();
 				$res= $query->get_result();
+				//Añadir que si las fechas  de fin son mayoyes que las de inicio que te salte un mensaje
                 //inser_id Devuelve el id autogenerado que se utilizó en la última consulta
 				$codigoConexion=$this->conexion->insert_id;
 				$query->close();
@@ -53,8 +56,8 @@
 			try
 			{	
 				$this->open_db();
-				$query=$this->conexion->prepare("UPDATE categorias SET nombre=? WHERE id=?");
-				$query->bind_param("si",$obj->nombre,$obj->id);
+				$query=$this->conexion->prepare("UPDATE retos SET nombre=? , dirigido=?, descripcion=?, fechaFinInscripcion=?, fechaInicioInscripcion=?, fechaFinReto=?, fechaInic  WHERE idReto=?");
+				$query->bind_param("ssssssssii",$obj->nombre,$obj->dirigido,$obj->descripcion,$obj->fechaFinInscripcion,$obj->fechaInicioInscripcion,$obj->fechaFinReto,$obj->fechaInicioReto,$obj->fechaPublicacion,$obj->publicado,$obj->id);
 				$query->execute();
 				$res=$query->get_result();						
 				$query->close();
@@ -72,7 +75,7 @@
 		{	
 			try{
 				$this->open_db();
-				$query=$this->conexion->prepare("DELETE FROM categorias WHERE id=?");
+				$query=$this->conexion->prepare("DELETE FROM retos WHERE idReto=?");
 				$query->bind_param("i",$id);
 				$query->execute();
 				$res=$query->get_result();
@@ -82,7 +85,7 @@
 			}
 			catch (Exception $e) 
 			{
-            	$this->closeDb();
+            	$this->close_db();
             	throw $e;
         	}		
         }   
@@ -94,11 +97,11 @@
                 $this->open_db();
                 if($id>0)
 				{	
-					$query=$this->conexion->prepare("SELECT * FROM categorias WHERE id=?");
+					$query=$this->conexion->prepare("SELECT * FROM retos WHERE idReto=?");
 					$query->bind_param("i",$id);
 				}
                 else
-                {$query=$this->conexion->prepare("SELECT * FROM categorias");	}		
+                {$query=$this->conexion->prepare("SELECT * FROM retos");	}		
 				
 				$query->execute();
 				$res=$query->get_result();	

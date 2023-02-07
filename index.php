@@ -8,7 +8,7 @@
 </head>
 <body>
     <button><a href="facade.php?actP=categoria">Categorias</a></button>
-    <button>Retos</button>
+    <button><a href="facade.php?actP=reto">Retos</a></button>
     <button>Profesores</button>
 </body>
 </html>
