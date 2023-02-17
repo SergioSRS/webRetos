@@ -15,7 +15,19 @@ class retoController{
 	/* LiLista de retos*/
 	public function list(){
 		$this->page_title = 'Listado de retos';
-		return $this->retoObj->getRetos();
+
+		if (isset($_POST['busqueda']) and !empty(($_POST['busqueda'])))
+		{	
+			$busqueda = ($_POST['busqueda']);
+			return $this->retoObj->getRetoFiltrado($busqueda);
+		}
+		else
+		{
+			return $this->retoObj->getRetos();
+		}
+		
+
+
 	}
 
 	/* Carga el reto para editar*/
@@ -23,6 +35,7 @@ class retoController{
 		$this->page_title = 'Editar reto';
 		$this->view = 'edit_reto';
 		/* Id can from get param or method param */
+		
 		if(isset($_GET["id"])) $id = $_GET["id"];
 		return $this->retoObj->getRetoById($id);
 	}

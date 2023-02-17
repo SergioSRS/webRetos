@@ -7,6 +7,8 @@ $id = $nombre = $dirigido = $descripcion = $fechaInicioInscripcion =
 
 //En el caso de que sea una modificación quiero obtener los valores
 if(isset($dataToView["data"]["id"])) $id = $dataToView["data"]["id"];
+if(isset($dataToView["data"]["idCategoria"])) $id = $dataToView["data"]["idCategoria"];
+if(isset($dataToView["data"]["nombreCategoria"])) $nombre = $dataToView["data"]["nombreCategoria"];
 if(isset($dataToView["data"]["nombre"])) $nombre = $dataToView["data"]["nombre"];
 if(isset($dataToView["data"]["dirigido"])) $dirigido = $dataToView["data"]["dirigido"];
 if(isset($dataToView["data"]["descripcion"])) $descripcion = $dataToView["data"]["descripcion"];
@@ -15,6 +17,7 @@ if(isset($dataToView["data"]["fechaFinInscripcion"])) $fechaFinInscripcion = $da
 if(isset($dataToView["data"]["fechaInicioReto"])) $fechaInicioReto = $dataToView["data"]["fechaInicioReto"];
 if(isset($dataToView["data"]["fechaFinReto"])) $fechaFinReto = $dataToView["data"]["fechaFinReto"];
 if(isset($dataToView["data"]["fechaPublicacion"])) $fechaPublicacion = $dataToView["data"]["fechaPublicacion"];
+var_dump($dataToView);
 
 ?>
 <div class="row">
@@ -64,23 +67,23 @@ if(isset($dataToView["data"]["fechaPublicacion"])) $fechaPublicacion = $dataToVi
 		</div>
 		<div class="form-group mb-2">
 			<label>Fecha Inicio Inscripcion</label>
-			<input type="date" class="form-control" name="fechaInicioInscripcion" value="<?php echo $fechaInicioInscripcion; ?>" />
+			<input type="datetime-local"" class="form-control" name="fechaInicioInscripcion" value="<?php echo $fechaInicioInscripcion; ?>" />
 		</div>
 		<div class="form-group mb-2">
 			<label>Fecha Fin Inscripcion</label>
-			<input type="date" class="form-control" name="fechaFinInscripcion" value="<?php echo $fechaFinInscripcion; ?>" />
+			<input type="datetime-local"" class="form-control" name="fechaFinInscripcion" value="<?php echo $fechaFinInscripcion; ?>" />
 		</div>
 		<div class="form-group mb-2">
 			<label>Fecha Inicio Reto</label>
-			<input type="date" class="form-control" name="fechaInicioReto" value="<?php echo $fechaInicioReto; ?>" />
+			<input type="datetime-local"" class="form-control" name="fechaInicioReto" value="<?php echo $fechaInicioReto; ?>" />
 		</div>
 		<div class="form-group mb-2">
 			<label>Fecha Fin Reto</label>
-			<input type="date" class="form-control" name="fechaFinReto" value="<?php echo $fechaFinReto; ?>" />
+			<input type="datetime-local" class="form-control" name="fechaFinReto" value="<?php echo $fechaFinReto; ?>" />
 		</div>
 		<div class="form-group mb-2">
 			<label>Fecha Publicacion</label>
-			<input type="date" class="form-control" name="fechaPublicacion" value="<?php echo $fechaPublicacion; ?>" />
+			<input type="datetime-local"" class="form-control" name="fechaPublicacion" value="<?php echo $fechaPublicacion; ?>" />
 		</div>
 		<div class="form-group mb-2">
 			<label>Publicar</label>

@@ -1,6 +1,9 @@
 <div class="row">
 	<div class="col-md-12 text-right">
 		<a href="index.php?controller=reto&action=edit" class="btn btn-outline-primary">Crear reto</a>
+		<form method="post" action="index.php?controller=reto&action=list">
+			<input type="text" name="busqueda"/><input type="submit" class="btn btn-outline-primary" value="Filtrar por Nombre">
+		</form>
 		<hr/>
 	</div>
 	<?php
