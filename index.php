@@ -18,7 +18,11 @@ $controller = new $controllerName();
 
 /* Check if method is defined */
 $dataToView["data"] = array();
-if(method_exists($controller,$_GET["action"])) $dataToView["data"] = $controller->{$_GET["action"]}();
+//Meto aquí el listado de categorias
+$dataToView["select"] = $controller->getCategorias();
+if(method_exists($controller,$_GET["action"])) {
+    $dataToView["data"] = $controller->{$_GET["action"]}();
+}
 
 
 /* Load views */

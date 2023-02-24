@@ -3,6 +3,19 @@
 		<a href="index.php?controller=reto&action=edit" class="btn btn-outline-primary">Crear reto</a>
 		<form method="post" action="index.php?controller=reto&action=list">
 			<input type="text" name="busqueda"/><input type="submit" class="btn btn-outline-primary" value="Filtrar por Nombre">
+			<label>
+				<select name="busquedaC">
+				<option value="">Selecciona una categoria</option>
+					<?php
+				
+						foreach($dataToView['select'] as $categoria){
+							?>
+								<option value="<?php echo $categoria['nombreCategoria']?>"><?php echo $categoria['nombreCategoria']?></option>
+							<?php
+							}
+						?>
+				</select>
+			</label><input type="submit" class="btn btn-outline-primary" value="Filtrar por Categoría">
 		</form>
 		<hr/>
 	</div>
@@ -13,7 +26,7 @@
 			<div class="col-md-3">
 				<div class="card-body border border-secondary rounded">
 					<h5 class="card-title"><?php echo $reto['nombre']; ?></h5>
-					<div class="card-text"><?php echo nl2br($reto['dirigido']); ?></div>
+					<div class="card-text"><?php echo $reto['dirigido']; ?></div>
 					<hr class="mt-1"/>
 					<a href="index.php?controller=reto&action=edit&id=<?php echo $reto['id']; ?>" class="btn btn-primary">Editar</a>
 					<a href="index.php?controller=reto&action=confirmDelete&id=<?php echo $reto['id']; ?>" class="btn btn-danger">Eliminar</a>

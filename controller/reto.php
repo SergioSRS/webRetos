@@ -11,30 +11,36 @@ class retoController{
 		$this->page_title = '';
 		$this->retoObj = new Reto();
 	}
-
-	/* LiLista de retos*/
+	//Metodo para conseguir las categorias de la bbdd
+	public function getCategorias(){
+		return $this->retoObj->getCategorias();
+	}
+	/* Lista de retos*/
 	public function list(){
 		$this->page_title = 'Listado de retos';
-
+		
+		//Control del filtrado por nombre
 		if (isset($_POST['busqueda']) and !empty(($_POST['busqueda'])))
 		{	
 			$busqueda = ($_POST['busqueda']);
 			return $this->retoObj->getRetoFiltrado($busqueda);
+		}//Control del filtrado por categoria
+		else if(isset($_POST['busquedaC']) and !empty(($_POST['busquedaC']))){
+			
+			$busqueda = ($_POST['busquedaC']);
+			return $this->retoObj->getRetoFiltradoCategoria($busqueda);
 		}
 		else
 		{
 			return $this->retoObj->getRetos();
 		}
-		
-
-
+	
 	}
 
 	/* Carga el reto para editar*/
 	public function edit($id = null){
 		$this->page_title = 'Editar reto';
 		$this->view = 'edit_reto';
-		/* Id can from get param or method param */
 		
 		if(isset($_GET["id"])) $id = $_GET["id"];
 		return $this->retoObj->getRetoById($id);
@@ -44,7 +50,10 @@ class retoController{
 	public function save(){
 		$this->view = 'edit_reto';
 		$this->page_title = 'Editar reto';
+		
 		$id = $this->retoObj->save($_POST);
+		//Controles del resultado del alta o del modificar
+		//Dependiendo del resultado nos activará un mensaje en la vista
 		if ($id=="duplicado"){
 			
 			$result = "error";

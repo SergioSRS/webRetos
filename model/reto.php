@@ -1,8 +1,10 @@
 <?php 
 
 class Reto {
-
+	//Nombre de la tabla retos
 	private $table = 'retos';
+	//Nombre de la tabla categoria
+	private $table2 = 'categoria';
 	private $conection;
 
 	public function __construct() {
@@ -38,15 +40,26 @@ class Reto {
 
 		return $result->fetch_assoc();
 	}
-		/* Coge un registro por id */
-		public function getRetoFiltrado($busqueda){
-			
-			$this->getConection();
-			$sql = "SELECT * FROM ".$this->table." WHERE nombre LIKE "."'".$busqueda."'";
-			$result = $this->conection->query($sql);
-	
-			return $result->fetch_all(MYSQLI_ASSOC);
-		}
+	//Metodo que sirve para realizar una busqueda de un reto por nombre
+	public function getRetoFiltrado($busqueda){
+		
+		$this->getConection();
+		$sql = "SELECT * FROM ".$this->table." WHERE nombre LIKE "."'".$busqueda."'";
+		$result = $this->conection->query($sql);
+
+		return $result->fetch_all(MYSQLI_ASSOC);
+	}
+	//Metodo que sirve para realizar un filtrado de retos por categoria
+	public function getRetoFiltradoCategoria($busqueda){
+		
+		$this->getConection();
+
+		$sql = "SELECT * FROM ".$this->table." INNER JOIN ".$this->table2." ON retos.idCategoria = categoria.idCategoria
+		where categoria.nombreCategoria LIKE "."'".$busqueda."'";
+		$result = $this->conection->query($sql);
+		//Usamos el paramatro opcional para tener el array como un array asociativo
+		return $result->fetch_all(MYSQLI_ASSOC);
+	}
 
 	/* Guarda el reto, ya sea actualizado o registrado por primera vez */
 	public function save($param){
@@ -55,8 +68,11 @@ class Reto {
 		/* Queremos que los campos por defectos estén vacios como un alta debería de tener*/
 		
 		$nombre = $dirigido = $descripcion = $fechaInicioInscripcion =
-		$fechaFinInscripcion = $fechaInicioReto = $fechaFinReto = $fechaPublicacion = "";
+		$fechaFinInscripcion = $fechaInicioReto = $fechaFinReto = $fechaPublicacion = $idCategoria = "";
 		$publicado = false;
+
+		//Por ahora el id del profesor es este
+		$idProfesor = 1;
 
 		/* Sirve para saber si el registro esta en la bbdd, si está, los atributos se llenan con los de la bbdd*/
 		$exists = false;
@@ -64,7 +80,7 @@ class Reto {
 			$actualReto = $this->getRetoById($param["id"]);
 			if(isset($actualReto["id"])){
 				$exists = true;	
-				/* valores que quiero modificar no?*/
+				/* valores que quiero modificar*/
 				$id = $param["id"];
 				$nombre = $actualReto["nombre"];
 				$dirigido = $actualReto["dirigido"];
@@ -75,10 +91,12 @@ class Reto {
 				$fechaFinReto = $actualReto["fechaFinReto"];
 				$fechaPublicacion = $actualReto["fechaPublicacion"];
 				$publicado = $actualReto["publicado"];
+				$idCategoria = $actualReto['idCategoria'];
 			}
 		}
 
 		/* Valores recibidos de un alta o un modificar */
+		/* Con este bloque de codigo me aseguro que lo que venga en blanco se guarde como null*/
 		try{
 			
 			if(isset($param["nombre"]) and !empty($param["nombre"]))
@@ -146,39 +164,47 @@ class Reto {
 			else if (empty($param["publicado"])){
 				$publicado = NULL;
 			}
+			if(isset($param["idCategoria"]) and !empty($param["idCategoria"]))
+			{
+				$idCategoria = $param["idCategoria"];
+			} 
+			else if (empty($param["idCategoria"])){
+				$idCategoria = NULL;
+			}
 		
 
 		/* SQL*/
-		
-				if($exists){ 
+			
+			if($exists){ 
 				$sql = "UPDATE ".$this->table." SET nombre=?, dirigido=?, descripcion=?, fechaFinInscripcion=?, fechaInicioInscripcion=?, 
-				fechaFinReto=?, fechaInicioReto=?, fechaPublicacion=?,  publicado=? WHERE id=?";
+				fechaFinReto=?, fechaInicioReto=?, fechaPublicacion=?,  publicado=?, idCategoria=? , idProfesor=? WHERE id=?";
 				$stmt = $this->conection->prepare($sql);
-				$stmt->bind_param('ssssssssii', $nombre, $dirigido, $descripcion ,$fechaFinInscripcion, $fechaInicioInscripcion, 
-				$fechaFinReto, $fechaInicioReto, $fechaPublicacion, $publicado , $id);
+				$stmt->bind_param('ssssssssiiii', $nombre, $dirigido, $descripcion ,$fechaFinInscripcion, $fechaInicioInscripcion, 
+				$fechaFinReto, $fechaInicioReto, $fechaPublicacion, $publicado ,  $idCategoria, $idProfesor, $id,);
 				$res = $stmt->execute();
 			}else{
 				$sql = "INSERT INTO ".$this->table."(nombre, dirigido, descripcion, fechaFinInscripcion, fechaInicioInscripcion, fechaFinReto,
-				fechaInicioReto, fechaPublicacion, publicado) values (?,?,?,?,?,?,?,?,?)";
+				fechaInicioReto, fechaPublicacion, publicado, idCategoria, idProfesor) values (?,?,?,?,?,?,?,?,?,?,?)";
 				$stmt = $this->conection->prepare($sql);
-				$stmt->bind_param('ssssssssi', $nombre, $dirigido, $descripcion ,$fechaFinInscripcion, $fechaInicioInscripcion, $fechaFinReto, 
-				$fechaInicioReto,$fechaPublicacion, $publicado,);
+			
+				$stmt->bind_param('ssssssssiii', $nombre, $dirigido, $descripcion ,$fechaFinInscripcion, $fechaInicioInscripcion, $fechaFinReto, 
+				$fechaInicioReto,$fechaPublicacion, $publicado, $idCategoria, $idProfesor);
 				$stmt->execute();
 				$id = $this->conection->insert_id;
-		}	
+			}	
 		}catch(Exception $error){
+
 			$error=$this->conection->errno;
 			$error2=$this->conection->error;
-			
+			//Codigo de error 1062 al insertar datos duplicados en un campo con restriccion unique
 			if ($error == 1062){
 				return 'duplicado';
 			}
+			//Codigo de error 4025 si al insertar datos en un campo no cumple el requisito check especificado en la bbdd
 			if ($error == 4025){
 				return 'check';
 			}
-			/*if($error == 1064){
-				return "null";
-			}*/
+			//Codigo de error 1048 al insertar null en un campo que no permite null.
 			if($error == 1048){
 				return "null";
 			}
@@ -199,7 +225,14 @@ class Reto {
 		$stmt->bind_param('i', $id);
 		return $stmt->execute();
 	}
-
+	/* Sacar el listado de categorias */
+	public function getCategorias(){
+		$this->getConection();
+		$sql = "SELECT * FROM ".$this->table2;
+		$result = $this->conection->query($sql);
+		return $result->fetch_all(MYSQLI_ASSOC);
+		
+	}
 }
 
 ?>

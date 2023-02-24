@@ -4,20 +4,22 @@
 
 $id = $nombre = $dirigido = $descripcion = $fechaInicioInscripcion =
  $fechaFinInscripcion = $fechaInicioReto = $fechaFinReto = $fechaPublicacion = "";
+ $idCategoria = "";
 
+ //Obtener el listado de categorias en la vista
+ $categorias = $dataToView["select"]; 
 //En el caso de que sea una modificación quiero obtener los valores
 if(isset($dataToView["data"]["id"])) $id = $dataToView["data"]["id"];
-if(isset($dataToView["data"]["idCategoria"])) $id = $dataToView["data"]["idCategoria"];
-if(isset($dataToView["data"]["nombreCategoria"])) $nombre = $dataToView["data"]["nombreCategoria"];
 if(isset($dataToView["data"]["nombre"])) $nombre = $dataToView["data"]["nombre"];
 if(isset($dataToView["data"]["dirigido"])) $dirigido = $dataToView["data"]["dirigido"];
+if(isset($dataToView["data"]["idCategoria"])) $idCategoria = $dataToView["data"]["idCategoria"];
 if(isset($dataToView["data"]["descripcion"])) $descripcion = $dataToView["data"]["descripcion"];
 if(isset($dataToView["data"]["fechaInicioInscripcion"])) $fechaInicioInscripcion = $dataToView["data"]["fechaInicioInscripcion"];
 if(isset($dataToView["data"]["fechaFinInscripcion"])) $fechaFinInscripcion = $dataToView["data"]["fechaFinInscripcion"];
 if(isset($dataToView["data"]["fechaInicioReto"])) $fechaInicioReto = $dataToView["data"]["fechaInicioReto"];
 if(isset($dataToView["data"]["fechaFinReto"])) $fechaFinReto = $dataToView["data"]["fechaFinReto"];
 if(isset($dataToView["data"]["fechaPublicacion"])) $fechaPublicacion = $dataToView["data"]["fechaPublicacion"];
-var_dump($dataToView);
+
 
 ?>
 <div class="row">
@@ -64,6 +66,19 @@ var_dump($dataToView);
 		<div class="form-group mb-2">
 			<label>Descripción</label>
 			<textarea class="form-control" style="white-space: pre-wrap;" name="descripcion"><?php echo $descripcion; ?></textarea>
+		</div>
+		<div class="form-group mb-2">
+			<label>Categorias
+				<select name="idCategoria">
+					<?php
+						foreach($categorias as $categoria){
+							?>
+								<option value=<?php echo $categoria['idCategoria']?>><?php echo $categoria['nombreCategoria']?></option>
+							<?php
+							}
+						?>
+				</select>
+			</label>
 		</div>
 		<div class="form-group mb-2">
 			<label>Fecha Inicio Inscripcion</label>
