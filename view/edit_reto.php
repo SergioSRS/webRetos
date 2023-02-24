@@ -69,7 +69,7 @@ if(isset($dataToView["data"]["fechaPublicacion"])) $fechaPublicacion = $dataToVi
 		</div>
 		<div class="form-group mb-2">
 			<label>Categorias
-				<select name="idCategoria">
+				<select class="form-select" name="idCategoria">
 					<?php
 						foreach($categorias as $categoria){
 							?>

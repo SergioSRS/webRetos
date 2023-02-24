@@ -45,6 +45,14 @@ class retoController{
 		if(isset($_GET["id"])) $id = $_GET["id"];
 		return $this->retoObj->getRetoById($id);
 	}
+	/* Carga el reto para consultar*/
+	public function consultar($id = null){
+		$this->page_title = 'Consultar reto';
+		$this->view = 'consultar_reto';
+		
+		if(isset($_GET["id"])) $id = $_GET["id"];
+		return $this->retoObj->getRetoById($id);
+	}
 
 	/*Metodo que crea o actualiza un reto */
 	public function save(){

@@ -4,7 +4,7 @@
 		<form method="post" action="index.php?controller=reto&action=list">
 			<input type="text" name="busqueda"/><input type="submit" class="btn btn-outline-primary" value="Filtrar por Nombre">
 			<label>
-				<select name="busquedaC">
+				<select class="form-select" name="busquedaC">
 				<option value="">Selecciona una categoria</option>
 					<?php
 				
@@ -29,6 +29,7 @@
 					<div class="card-text"><?php echo $reto['dirigido']; ?></div>
 					<hr class="mt-1"/>
 					<a href="index.php?controller=reto&action=edit&id=<?php echo $reto['id']; ?>" class="btn btn-primary">Editar</a>
+					<a href="index.php?controller=reto&action=consultar&id=<?php echo $reto['id']; ?>" class="btn btn-info">Consultar</a>
 					<a href="index.php?controller=reto&action=confirmDelete&id=<?php echo $reto['id']; ?>" class="btn btn-danger">Eliminar</a>
 				</div>
 			</div>
