@@ -45,4 +45,5 @@ if(isset($dataToView["data"]["fechaPublicacion"])) $fechaPublicacion = $dataToVi
 		<td><?php echo $fechaPublicacion; ?></td>
 	</tr>
 	</table>
+	<a href="index.php?controller=reto"><button>Volver</button></a>
 </div>

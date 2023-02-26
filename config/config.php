@@ -8,7 +8,7 @@ define("DB_PASS", "");
 define("CODIFICACION","UTF8mb4");
 
 /* opciones por defecto*/
-define("DEFAULT_CONTROLLER", "reto");
+define("DEFAULT_CONTROLLER", "app");
 define("DEFAULT_ACTION", "list");
 
 ?>
