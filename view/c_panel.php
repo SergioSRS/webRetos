@@ -15,5 +15,8 @@
             <a href="index.php?controller=reto">Reto</a>
         </div>
     </div>
+    <form method="post" action="index.php?controller=app&action=validarUsuario">
+        <input type="submit" value="Cerrar Sesion"name="cerrarSesion"/>
+    </form>
 </body>
 </html>

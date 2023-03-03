@@ -31,6 +31,6 @@
 	}
 	?>
 	<div class="col-md-3">
-		<a href=index.php><button  class="btn btn-info">Volver al cpanel</button></a>
+		<a href="index.php?controller=app&action=validarUsuario"><button  class="btn btn-info">Volver al cpanel</button></a>
 	</div>	
 </div>

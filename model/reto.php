@@ -21,10 +21,68 @@ class Reto {
 	public function getRetos(){
 		
 		$this->getConection();
-		$sql = "SELECT * FROM ".$this->table;
+		$idProfesor = $_SESSION['id'];
+		$sql = "SELECT * FROM ".$this->table." WHERE idProfesor = ".$idProfesor;
 		$result = $this->conection->query($sql);
 
 		return $result->fetch_all(MYSQLI_ASSOC);
+	}
+	public function descargarPDF($id){
+		$this->getConection();
+		//Objeto pdf
+		$pdf = new FPDF();
+		//llamo los datos del reto
+		$datosReto = $this->getRetoById($id);
+		/*Como el profesor logeado, es el unico que puede descargar los retos que el mismo ve usamos la sesion
+			podriamos llamar a un metodo que nos generara una consulta, si la aplicacion no funcionara como ahora*/
+
+		//Añado una pagina al pdf
+		$pdf->AddPage();
+
+		// metadatos
+		$pdf->SetTitle('Retopdf');
+		$pdf->SetAuthor('Sergio');
+		// añado un titulo
+		$pdf->SetFont('Arial', 'B', 24);
+		$pdf->Cell(0, 10, $datosReto['nombre'], 0, 1);
+		$pdf->Ln();
+
+		// add text
+		$pdf->SetFont('Arial', 'B', 16);
+		$pdf->MultiCell(0, 7, utf8_decode("Reto publicado por"), 0, 1);
+		$pdf->Ln();
+		$pdf->SetFont('Arial', '', 12);
+		$pdf->MultiCell(0, 7, utf8_decode($_SESSION['nombre']), 0, 1);
+		$pdf->Ln();
+		/*$pdf->SetFont('Arial', 'B', 16);
+		$pdf->MultiCell(0, 7, utf8_decode("Categoria"), 0, 1);
+		$pdf->Ln();
+		$pdf->SetFont('Arial', '', 12);
+		$pdf->MultiCell(0, 7, utf8_decode($categoria['nombreCategoria']), 0, 1);
+		$pdf->Ln();*/
+		$pdf->SetFont('Arial', 'B', 16);
+		$pdf->MultiCell(0, 7, utf8_decode("Recomendado para"), 0, 1);
+		$pdf->Ln();
+		$pdf->SetFont('Arial', '', 12);
+		$pdf->MultiCell(0, 7, utf8_decode($datosReto['dirigido']), 0, 1);
+		$pdf->Ln();
+		$pdf->SetFont('Arial', 'B', 16);
+		$pdf->MultiCell(0, 7, utf8_decode("Descripcion del reto"), 0, 1);
+		$pdf->Ln();
+		$pdf->SetFont('Arial', '', 12);
+		if ($datosReto['descripcion']== null)
+		{
+			$pdf->MultiCell(0, 7, utf8_decode("Sin descripcion"), 0, 1);
+		}
+		else{
+			$pdf->MultiCell(0, 7, utf8_decode($datosReto['descripcion']), 0, 1);
+		}
+
+		// add image
+		//$pdf->Image('assets/fpdf-code.png', null, null, 180);
+
+		// output file
+		$pdf->Output('', $datosReto['nombre'].'.pdf');
 	}
 
 	/* Coge un registro por id */
@@ -37,7 +95,6 @@ class Reto {
 		$stmt->execute();
 
 		$result = $stmt->get_result();
-
 		return $result->fetch_assoc();
 	}
 	//Metodo que sirve para realizar una busqueda de un reto por nombre
@@ -71,8 +128,8 @@ class Reto {
 		$fechaFinInscripcion = $fechaInicioReto = $fechaFinReto = $fechaPublicacion = $idCategoria = "";
 		$publicado = false;
 
-		//Por ahora el id del profesor es este
-		$idProfesor = 1;
+		//EL id del profesor es el de la sesion
+		$idProfesor = $_SESSION['id'];
 
 		/* Sirve para saber si el registro esta en la bbdd, si está, los atributos se llenan con los de la bbdd*/
 		$exists = false;
@@ -97,6 +154,7 @@ class Reto {
 
 		/* Valores recibidos de un alta o un modificar */
 		/* Con este bloque de codigo me aseguro que lo que venga en blanco se guarde como null*/
+		//CAMBIAR ESTO POR QUE NO ESTA BIEN
 		try{
 			
 			if(isset($param["nombre"]) and !empty($param["nombre"]))
@@ -114,7 +172,8 @@ class Reto {
 			else if (empty($param["dirigido"])){
 				$dirigido = NULL;
 			}
-		
+			//los campos text siempre se crean, pueden venir vacio
+			//Los tipos radio y los checkbox se crean, es lo que necesito saber
 			if(isset($param["descripcion"]) and !empty($param["descripcion"]))
 			{
 				$descripcion = $param["descripcion"];
@@ -233,6 +292,19 @@ class Reto {
 		return $result->fetch_all(MYSQLI_ASSOC);
 		
 	}
+	//Sacando categorias por id
+	/*public function getCategoriaById($idCategoria){
+		
+		$this->getConection();
+		$sql = "SELECT * FROM ".$this->table2." WHERE idCategoria = ?";
+		$stmt = $this->conection->prepare($sql);
+		$stmt->bind_param('i', $idCategoria);
+		$result = $stmt->get_result();
+
+		return $result->fetch_assoc();
+		
+		
+	}*/
 }
 
 ?>

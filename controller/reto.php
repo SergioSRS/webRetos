@@ -17,8 +17,12 @@ class retoController{
 	}
 	/* Lista de retos*/
 	public function list(){
-		$this->page_title = 'Listado de retos';
-		
+		//Necesario para mantener el titulo de la pagina
+		if(!$_SESSION || isset($_POST['cerrarSesion'])){
+			$this->page_title = "Login de Profesores";
+		}else{
+			$this->page_title = 'Listado de retos';
+		}	
 		//Control del filtrado por nombre
 		if (isset($_POST['busqueda']) and !empty(($_POST['busqueda'])))
 		{	
@@ -39,7 +43,12 @@ class retoController{
 
 	/* Carga el reto para editar*/
 	public function edit($id = null){
-		$this->page_title = 'Editar reto';
+		if(!$_SESSION || isset($_POST['cerrarSesion'])){
+			$this->page_title = "Login de Profesores";
+		}else{
+			$this->page_title = 'Editar reto';
+		}	
+	
 		$this->view = 'edit_reto';
 		
 		if(isset($_GET["id"])) $id = $_GET["id"];
@@ -47,7 +56,11 @@ class retoController{
 	}
 	/* Carga el reto para consultar*/
 	public function consultar($id = null){
-		$this->page_title = 'Consultar reto';
+		if(!$_SESSION || isset($_POST['cerrarSesion'])){
+			$this->page_title = "Login de Profesores";
+		}else{
+			$this->page_title = 'Consultar reto';
+		}	
 		$this->view = 'consultar_reto';
 		
 		if(isset($_GET["id"])) $id = $_GET["id"];
@@ -56,8 +69,13 @@ class retoController{
 
 	/*Metodo que crea o actualiza un reto */
 	public function save(){
+		if(!$_SESSION || isset($_POST['cerrarSesion'])){
+			$this->page_title = "Login de Profesores";
+		}else{
+			$this->page_title = 'Editar reto';
+		}	
 		$this->view = 'edit_reto';
-		$this->page_title = 'Editar reto';
+	
 		
 		$id = $this->retoObj->save($_POST);
 		//Controles del resultado del alta o del modificar
@@ -86,16 +104,36 @@ class retoController{
 
 	/* El confirmar para deletear*/
 	public function confirmDelete(){
-		$this->page_title = 'Eliminar reto';
+		if(!$_SESSION || isset($_POST['cerrarSesion'])){
+			$this->page_title = "Login de Profesores";
+		}else{
+			$this->page_title = 'Eliminar reto';
+		}	
+		
 		$this->view = 'confirm_delete_reto';
 		return $this->retoObj->getRetoById($_GET["id"]);
 	}
 
 	/* Delete */
 	public function delete(){
-		$this->page_title = 'Listado de retos';
+		if(!$_SESSION || isset($_POST['cerrarSesion'])){
+			$this->page_title = "Login de Profesores";
+		}else{
+			$this->page_title = 'Listado de retos';
+		}
+		
 		$this->view = 'delete_reto';
 		return $this->retoObj->deleteRetoById($_POST["id"]);
+	}
+	public function descargarPDF(){
+		if(!$_SESSION || isset($_POST['cerrarSesion'])){
+			$this->page_title = "Login de Profesores";
+		}else{
+			$this->page_title = 'Listado de retos';
+		}
+		$this->view = 'list_reto';
+
+		$this->retoObj->descargarPDF($_GET["id"]);
 	}
 
 }
