@@ -1,5 +1,6 @@
 <?php
-
+use Shuchkin\SimpleXLSX;
+require "simpleXLSX/SimpleXLSX.php";
 class Login{
 
 	private $table = 'profesores';
@@ -14,8 +15,7 @@ class Login{
 		$this->conection = $dbObj->conection;
 	}
 
-	public function validarUsuario($parametros)
-	{
+	public function validarUsuario($parametros){
 		$this->getConection();
 	
 		//Nos aseguramos de que si nos llega algo vacio, se quede nulo a la hora de hacer la consulta
@@ -43,16 +43,6 @@ class Login{
 		
 		$fila = $resultado ->fetch_array();
 	
-		//$comprobar = $fila['password'];
-	
-			//if($comprobar == $pass){
-				/*ini_set('session.cookie_lifetime',0);// cuando un navegador finaliza, la cookie de ID de sesión se elimina inmediatamente
-				ini_set('session.cookie_httponly',true);//Este ajuste previene del robo de cookies por inyecciones de JavaScript. 
-				ini_set('session.use_strict_mode',true);//Para que no puedan usar un id de sesion si no se ha iniciado sesion.
-				ini_set('session.use_only_cookies',1); //Las cookies deben estar activas incondicionalmente en el lado del usuario, o las sesiones no funcionarán. 
-				session_start();
-				$_SESSION['nombre'] = $fila['nombre'];
-				$_SESSION['id'] = $fila['id'];*/
 				@session_start();
 				$_SESSION['nombre'] = $fila['nombre'];
 				$_SESSION['id'] = $fila['id'];
@@ -61,7 +51,55 @@ class Login{
 				return false;
 			}
 		}
+	public function insertarProfesoresExcel(){
+		$this->getConection();
+        $nombres = array();
+        $correos = array();
+        $passwords = array();
+
+        if (isset($_FILES['profesores']))
+        {
+            $xlsx = new SimpleXLSX($_FILES['profesores']['tmp_name']);     
+            list($cols,) = $xlsx->dimension();
+
+            foreach($xlsx->rows() as $k)
+            {
+                array_push($nombres, $k[0]);
+                array_push($correos, $k[1]);
+                array_push($passwords, $k[2]);
+            }
+
+            if((count($nombres) == count($correos)) && (count($correos) == count($passwords)))
+            {
+                $sql = "INSERT INTO profesores(nombre, correo, password) VALUES(?, ?, ?)";
+        
+                $consulta = $this->conection->prepare($sql);
+        
+                $nombre = '';
+                $correo = '';
+                $password = '';
+        
+                $consulta->bind_param('sss', $nombre, $correo, $password);
+        
+                for($i=0; $i<count($nombres); $i++) 
+                {
+                    $nombre = $nombres[$i];
+                    $correo = $correos[$i];
+                    $password = password_hash($passwords[$i], PASSWORD_DEFAULT);
+        
+                    $consulta->execute();
+                }
+    
+        
+				return "ok";
+            }
+            else
+            {
+                return "not ok";
+            }
+        }
 	}
+}
 
 
    

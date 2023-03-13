@@ -27,5 +27,9 @@ class appController{
 			$this->page_title = "Panel de control";
 		}
 	}
+	public function insertarProfesores(){
+		$this->loginObj->insertarProfesoresExcel();
+		
+	}
 
 }

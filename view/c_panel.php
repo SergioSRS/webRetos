@@ -15,6 +15,10 @@
             <a href="index.php?controller=reto">Reto</a>
         </div>
     </div>
+    <form method="post" action="index.php?controller=app&action=insertarProfesores" enctype="multipart/form-data">
+        <label>Añadir profesores<input type="file" name="profesores"></label>
+        <input type="submit" name="enviarFile">
+    </form>
     <form method="post" action="index.php?controller=app&action=validarUsuario">
         <input type="submit" value="Cerrar Sesion"name="cerrarSesion"/>
     </form>
